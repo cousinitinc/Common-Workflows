@@ -1,0 +1,33 @@
+name: say hello world on demand.
+
+on:
+  workflow_dispatch:
+    inputs:
+      name: 
+        description: "What is your name?"
+        required: true
+        default: "you"
+        type: choice
+        options:
+          - alex
+          - sarah
+          - amy
+
+      weather:
+        description: "what is the weather?"
+        required: true
+        default: "rainy"
+  
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      id: checkout_code
+      uses: actions/checkout@v2
+
+    - name: Greet
+      id: greet
+      run: |
+        echo "Hello ${{ github.event.inputs.name }}, it is ${{ github.event.inputs.weather }} today."

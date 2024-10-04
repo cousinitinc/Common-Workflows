@@ -1,0 +1,6 @@
+[submodule "payloads/payloadOne"]
+	path = payloads/payloadOne
+	url = https://github.com/cousinit256/payloadOne.git
+[submodule "payloads/payloadTwo"]
+	path = payloads/payloadTwo
+	url = https://github.com/cousinit256/payloadTwo.git

@@ -1,0 +1,47 @@
+name: check for updates of submodules and do stuff.
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'payloads/**'
+
+jobs:
+  check-submodules:
+
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      id: checkout_code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        submodules: true
+
+    - name: get list of submodules that have changed
+      id: list_changes
+      run: |
+        git_diff=$(git diff --submodule=log ${{ github.event.before }} ${{ github.sha }} -- payloads)
+        echo "Git diff: $git_diff"
+
+
+        changed_submodules=$(echo "$git_diff" | grep "Submodule" | awk '{print $2}' | sed 's/payloads\///' | sort | uniq | tr '\n' ',' | sed 's/,$//')
+        echo "Changed submodules: $changed_submodules"
+        IFS=',' read -r -a submoduleList <<< "$changed_submodules"
+
+        for submodule in "${submoduleList[@]}"; do
+          # Get the full path for the submodule
+            full_submodule_path="payloads/$submodule"
+            
+            # Get the SHA of the submodule
+            sha=$(git submodule status "$full_submodule_path" | awk '{print $1}' | sed 's/^[+-]//')
+            
+            # Store the new SHA in a comma separated list
+            if [ -z "$commits" ]; then
+              commits="$sha"
+            else
+              commits="$commits,$sha"
+            fi
+        done
+
+        echo "New submodule SHAs: $commits"

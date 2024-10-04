@@ -1,0 +1,40 @@
+name: build and run hello world program
+
+on:
+  repository_dispatch:
+    types: [run-hello-world]
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.temp_token}}
+
+    - name: set up .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    
+    - name: Fetch assets from repository
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ github.event.client_payload.repo_name }}
+        token: ${{ secrets.temp_token}}
+        path: helloWorld/downloaded-folder
+
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: helloWorld
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+      working-directory: helloWorld
+
+    - name: Run
+      run: dotnet run --folder "downloaded-folder/filesToPrint"
+      working-directory: helloWorld
+    
