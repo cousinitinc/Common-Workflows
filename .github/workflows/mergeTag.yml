@@ -1,0 +1,21 @@
+name: Create Tag on Merge to Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create Tag
+        run: |
+          # Construct a tag in the format "yy.mm.run_number"
+          TAG_NAME=$(date +%y.%m).${{ github.run_number }}
+          git tag $TAG_NAME
+          git push origin $TAG_NAME
