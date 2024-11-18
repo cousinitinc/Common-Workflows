@@ -42,7 +42,7 @@ jobs:
       id: checkout_code
       uses: actions/checkout@v4
       with:
-        secret: ${{ secrets.ACCESS_TOKEN}}
+        token: ${{ secrets.ACCESS_TOKEN}}
 
     - name: Greet
       id: greet
