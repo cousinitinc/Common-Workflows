@@ -19,6 +19,22 @@ on:
         default: "rainy"
   
 jobs:
+  approval: 
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: trstring/manual-approval@v1
+      with:
+        secret: ${{ secrets.ACCESS_TOKEN}}
+        approvers: approvers
+        minimum-approvals: 1
+        issue-title: "Running hello world"
+        issue-body: "Please approve or deny the running of hello world."
+        exclude-workflow-initiator-as-approver: false
+        additional-approved-words: ''
+        additional-denied-words: ''
+
+
   greet:
     runs-on: ubuntu-latest
 
