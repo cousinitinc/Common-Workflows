@@ -40,7 +40,9 @@ jobs:
     steps:
     - name: Checkout code
       id: checkout_code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
+      with:
+        secret: ${{ secrets.ACCESS_TOKEN}}
 
     - name: Greet
       id: greet

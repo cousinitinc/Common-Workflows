@@ -1,0 +1,23 @@
+name: Release version
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  print-details:
+    runs-on: ubuntu-latest
+    needs: approval
+
+    steps:
+    - name: Checkout code
+      id: checkout_code
+      uses: actions/checkout@v4
+      with:
+        secret: ${{ secrets.ACCESS_TOKEN}}
+
+    - name: Greet
+      id: greet
+      run: |
+        echo "Release ${GITHUB_REF} has been created and is now published! Commit SHA is: {$GITHUB_SHA}"
+    
