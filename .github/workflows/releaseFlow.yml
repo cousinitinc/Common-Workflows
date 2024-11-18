@@ -18,5 +18,5 @@ jobs:
     - name: Greet
       id: greet
       run: |
-        echo "Release ${GITHUB_REF} has been created and is now published! Commit SHA is: {$GITHUB_SHA}"
+        echo "Release ${GITHUB_REF} has been created and is now published! Commit SHA is: ${GITHUB_SHA}"
     
