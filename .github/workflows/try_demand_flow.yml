@@ -37,6 +37,7 @@ jobs:
 
   greet:
     runs-on: ubuntu-latest
+    needs: approval
 
     steps:
     - name: Checkout code
