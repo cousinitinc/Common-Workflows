@@ -9,17 +9,26 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: trstringer/manual-approval@v1
-      with:
+    - name: set_message
+      id: set_message
+      run: |
+        echo "TITLE=Request to release ${GITHUB_REF}" >> $GITHUB_OUTPUT
+        echo "BODY=Please approve or deny the release of version ${GITHUB_REF}. Commit SHA is: ${GITHUB_SHA}." >> $GITHUB_OUTPUT
+
+
+    - name: get approval
+      uses: trstringer/manual-approval@v1
+      with: 
         secret: ${{ secrets.ACCESS_TOKEN}}
         approvers: approvers
         minimum-approvals: 1
-        issue-title: "Request to release ${GITHUB_REF}"
-        issue-body: "Please approve or deny the release of version ${GITHUB_REF}. Commit SHA is: ${GITHUB_SHA}."
+        issue-title: ${{ steps.set_message.outputs.TITLE}}
+        issue-body: ${{ steps.set_message.outputs.BODY}}
         exclude-workflow-initiator-as-approver: false
 
   print-details:
     runs-on: ubuntu-latest
+    needs: approval
 
     steps:
     - name: Checkout code
