@@ -23,10 +23,11 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       issues: write
-
+      
     steps:
     - uses: trstringer/manual-approval@v1
       with:
+        secret: ${{ secrets.GITHUB_TOKEN}}
         approvers: approvers
         minimum-approvals: 1
         issue-title: "Running hello world"
