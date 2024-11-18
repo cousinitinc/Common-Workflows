@@ -24,7 +24,7 @@ jobs:
         minimum-approvals: 1
         issue-title: ${{ steps.set_message.outputs.TITLE}}
         issue-body: ${{ steps.set_message.outputs.BODY}}
-        exclude-workflow-initiator-as-approver: false
+        exclude-workflow-initiator-as-approver: true
 
   print-details:
     runs-on: ubuntu-latest
