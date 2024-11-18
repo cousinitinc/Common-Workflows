@@ -28,7 +28,7 @@ jobs:
     - uses: trstringer/manual-approval@v1
       with:
         secret: ${{ secrets.GITHUB_TOKEN}}
-        approvers: approvers
+        approvers: cousinitinc-approvers
         minimum-approvals: 1
         issue-title: "Running hello world"
         issue-body: "Please approve or deny the running of hello world."
