@@ -16,6 +16,8 @@ jobs:
     - name: set_message
       id: set_message
       run: |
+        echo git tag -l
+        echo git tag -l "$TAG"
         TAG=${{ github.event.inputs.tag }}
         if ! git tag -l "$TAG" | grep -q "^$TAG$"; then
           echo "Error: $TAG is not a valid tag."
