@@ -13,6 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+    - name: Checkout code
+      id: checkout_code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.ACCESS_TOKEN}}
+
     - name: set_message
       id: set_message
       run: |
