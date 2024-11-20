@@ -47,4 +47,6 @@ jobs:
     - name: Greet
       id: greet
       run: |
-        echo "Hello ${{ github.event.inputs.name }}, it is ${{ github.event.inputs.weather }} today."
+        echo "Hello ${{ github.event.inputs.name }},
+        it is ${{ github.event.inputs.weather }} today.
+        thing"
