@@ -40,10 +40,10 @@ jobs:
               (
                   cd $submodulePath
                   if ! git merge-base --is-ancestor $SHA_B $SHA_A; then
-                      echo "submodule $submodulePath is out of date with main"
+                      echo "submodule $submodulePath is out of date with submodule sha in main"
                       exit 1
                   else
-                      echo "submodule $submodulePath is in date with main"
+                      echo "submodule $submodulePath is in date with submodule sha in main"
                   fi
               )
           done
