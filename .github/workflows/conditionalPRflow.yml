@@ -13,7 +13,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0
+          submodules: true
 
       - name: Check shas of repository and submodules
         run: |
@@ -38,11 +39,11 @@ jobs:
                   exit 1
               fi
               (
-                  SUBMODULE_URL=$(git config --file .gitmodules submodule.$submodulePath.url)
+                  # SUBMODULE_URL=$(git config --file .gitmodules submodule.$submodulePath.url)
                   cd $submodulePath
-                  git remote add -f origin "$SUBMODULE_URL" || true
+                  # git remote add -f origin "$SUBMODULE_URL" || true
                   git remote -v
-                  git fetch origin
+                  # git fetch origin
                   if ! git merge-base --is-ancestor $SHA_B $SHA_A; then
                       echo "submodule $submodulePath is out of date with main"
                   else
