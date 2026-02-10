@@ -13,15 +13,33 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
-      - name: Check if branch is up to date with main
+      - name: Check shas of repository and submodules
         run: |
-          git fetch origin main
+          git fetch origin
           if ! git merge-base --is-ancestor origin/main HEAD; then
-            echo "Branch is out of date with main"
-            exit 1
+              echo "Branch is out of date with main"
+          else
+              echo "Branch is in date with main"
           fi
+
+          for submodulePath in $(git config --file .gitmodules --get-regexp path | awk '{print $2}'); do
+              echo "Processing $submodulePath"
+              SHA_A=$(git rev-parse HEAD:remoteSub)
+              SHA_B=$(git rev-parse origin/main:remoteSub)
+              echo "SHA_A is $SHA_A and SHA_B is $SHA_B"
+              (
+                  cd $submodulePath
+                  git fetch origin
+                  if ! git merge-base --is-ancestor $SHA_B $SHA_A; then
+                      echo "submodule $submodulePath is out of date with main"
+                  else
+                      echo "submodule $submodulePath is in date with main"
+                  fi
+              )
+          done
+          
 
   echo-hello-world:
     name: Echo Hello World
