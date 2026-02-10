@@ -18,6 +18,9 @@ jobs:
       - name: Check if branch is up to date with main
         run: |
           git fetch origin main
+          SHAA_A=$(git show HEAD)
+          SHAA_B=$(git show origin/main)
+          echo "SHAA_A is $SHAA_A and SHAA_B is $SHAA_B"
           if ! git merge-base --is-ancestor origin/main HEAD; then
             echo "Branch is out of date with main"
             exit 1
