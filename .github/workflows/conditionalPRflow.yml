@@ -28,6 +28,8 @@ jobs:
               echo "Processing $submodulePath"
               SHA_A=$(git rev-parse HEAD:remoteSub)
               SHA_B=$(git rev-parse origin/main:remoteSub)
+              echo "SHA_A = $SHA_A"
+              echo "SHA_B = $SHA_B"
               if [ "$SHA_A" = "$SHA_B" ]; then
                   echo "SHAs for $submodulePath are equal"
                   continue
