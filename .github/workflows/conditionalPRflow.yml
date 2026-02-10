@@ -18,7 +18,6 @@ jobs:
       - name: Check main sha
         run: |
           git fetch origin main
-          echo "SHAA_A is $SHAA_A and SHAA_B is $SHAA_B"
           if ! git merge-base --is-ancestor origin/main HEAD; then
             echo "Branch is out of date with main"
             exit 1
@@ -29,8 +28,8 @@ jobs:
         run: |
           for submodulePath in remoteSub; do
             echo "Processing $submodulePath"
-            SHA_A=$(git show HEAD/$submodulePath)
-            SHA_B=$(git show origin/main/$submodulePath)
+            SHA_A=$(git rev-parse HEAD:remoteSub)
+            SHA_B=$(git rev-parse origin/main:remoteSub)
             echo "SHA_A is $SHA_A and SHA_B is $SHA_B"
           
 
