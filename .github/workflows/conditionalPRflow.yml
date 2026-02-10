@@ -17,7 +17,7 @@ jobs:
 
       - name: Check shas of repository and submodules
         run: |
-          git fetch origin
+          git fetch origin main
           if ! git merge-base --is-ancestor origin/main HEAD; then
               echo "Branch is out of date with main"
           else
