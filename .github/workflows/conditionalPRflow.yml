@@ -41,6 +41,7 @@ jobs:
               fi
               (
                   cd $submodulePath
+                  git remote -v
                   git fetch --all
                   if ! git merge-base --is-ancestor $SHA_B $SHA_A; then
                       echo "submodule $submodulePath is out of date with main"
