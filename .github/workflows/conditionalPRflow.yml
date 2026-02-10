@@ -15,21 +15,29 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Check main sha
+      - name: Check shas of repository and submodules
         run: |
-          git fetch origin main
+          git fetch origin
           if ! git merge-base --is-ancestor origin/main HEAD; then
-            echo "Branch is out of date with main"
+              echo "Branch is out of date with main"
+          else
+              echo "Branch is in date with main"
           fi
-          echo "Branch is in date with main"
 
-      - name: Check submodule shas
-        run: |
           for submodulePath in remoteSub; do
-            echo "Processing $submodulePath"
-            SHA_A=$(git rev-parse HEAD:remoteSub)
-            SHA_B=$(git rev-parse origin/main:remoteSub)
-            echo "SHA_A is $SHA_A and SHA_B is $SHA_B"
+              echo "Processing $submodulePath"
+              SHA_A=$(git rev-parse HEAD:remoteSub)
+              SHA_B=$(git rev-parse origin/main:remoteSub)
+              echo "SHA_A is $SHA_A and SHA_B is $SHA_B"
+              (
+                  cd $submodulePath
+                  git fetch origin
+                  if ! git merge-base --is-ancestor $SHA_B $SHA_A; then
+                      echo "submodule $submodulePath is out of date with main"
+                  else
+                      echo "submodule $submodulePath is in date with main"
+                  fi
+              )
           done
           
 
