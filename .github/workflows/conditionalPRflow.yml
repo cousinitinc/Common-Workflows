@@ -18,17 +18,25 @@ jobs:
       - name: Check shas of repository and submodules
         run: |
           git fetch origin main
-          if ! git merge-base --is-ancestor origin/main HEAD; then
+          if [ ! git merge-base --is-ancestor origin/main HEAD ]; then
               echo "Branch is out of date with main"
           else
               echo "Branch is in date with main"
           fi
 
-          for submodulePath in $(git config --file .gitmodules --get-regexp path | awk '{print $2}'); do
+          for submodulePath in remoteSub; do
               echo "Processing $submodulePath"
               SHA_A=$(git rev-parse HEAD:remoteSub)
               SHA_B=$(git rev-parse origin/main:remoteSub)
-              echo "SHA_A is $SHA_A and SHA_B is $SHA_B"
+              if [ "$SHA_A" = "$SHA_B" ]; then
+                  echo "SHAs for $submodulePath are equal"
+                  continue
+              fi
+              echo "SHAs for $submodulePath differ"
+              if [ ! -d "$submodulePath" ]; then
+                  echo "Folder $submodulePath not found"
+                  exit 1
+              fi
               (
                   cd $submodulePath
                   git fetch origin
