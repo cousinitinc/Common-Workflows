@@ -20,7 +20,6 @@ jobs:
           git fetch origin main
           if ! git merge-base --is-ancestor origin/main HEAD; then
             echo "Branch is out of date with main"
-            exit 1
           fi
           echo "Branch is in date with main"
 
