@@ -4,3 +4,6 @@
 [submodule "payloads/payloadTwo"]
 	path = payloads/payloadTwo
 	url = https://github.com/cousinit256/payloadTwo.git
+[submodule "remoteSub"]
+	path = remoteSub
+	url = https://github.com/cousinitinc/Remote-workflow.git
