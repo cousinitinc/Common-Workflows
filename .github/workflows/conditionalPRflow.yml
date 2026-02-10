@@ -33,7 +33,6 @@ jobs:
               if [ "$SHA_A" = "$SHA_B" ]; then
                   continue
               fi
-              echo "SHAs for $submodulePath differ"
               if [ ! -d "$submodulePath" ]; then
                   echo "Folder $submodulePath not found"
                   exit 1
@@ -44,6 +43,8 @@ jobs:
                   if ! git merge-base --is-ancestor $SHA_B $SHA_A; then
                       echo "submodule $submodulePath is out of date with main"
                       exit 1
+                  else
+                      echo "submodule $submodulePath is in date with main"
                   fi
               )
           done
