@@ -18,19 +18,22 @@ jobs:
 
       - name: Check shas of repository and submodules
         run: |
-          git fetch origin main
-          if ! git merge-base --is-ancestor origin/main HEAD; then
-              echo "Branch is out of date with main"
+          echo "head_ref: ${{ github.head_ref }}"
+          echo "base_ref: ${{ github.base_ref }}"
+          git fetch origin ${{ github.head_ref }} ${{ github.base_ref }}
+          if ! git merge-base --is-ancestor origin/${{ github.base_ref }} origin/${{ github.head_ref }}; then
+              echo "Branch is out of date with ${{ github.base_ref }}"
               exit 1
           else
-              echo "Branch is in date with main"
+              echo "Branch is up to date with ${{ github.base_ref }}"
           fi
 
           for submodulePath in remoteSub; do
               echo "Processing $submodulePath"
-              SHA_A=$(git rev-parse HEAD:remoteSub)
-              SHA_B=$(git rev-parse origin/main:remoteSub)
+              SHA_A=$(git rev-parse origin/${{ github.head_ref }}:$submodulePath)
+              SHA_B=$(git rev-parse origin/${{ github.base_ref }}:$submodulePath)
               if [ "$SHA_A" = "$SHA_B" ]; then
+                  echo "SHAs of $submodulePath match: $SHA_A"
                   continue
               fi
               if [ ! -d "$submodulePath" ]; then
@@ -40,13 +43,14 @@ jobs:
               (
                   cd $submodulePath
                   if ! git merge-base --is-ancestor $SHA_B $SHA_A; then
-                      echo "submodule $submodulePath is out of date with submodule sha in main"
+                      echo "submodule $submodulePath is out of date with submodule sha in ${{ github.base_ref }}"
                       exit 1
                   else
-                      echo "submodule $submodulePath is in date with submodule sha in main"
+                      echo "submodule $submodulePath is up to date with submodule sha in ${{ github.base_ref }}"
                   fi
               )
           done
+          echo "PR branch is up to date with main, proceeding to dev deployment."
           
 
   echo-hello-world:
